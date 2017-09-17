@@ -93,7 +93,7 @@
         }
         this.uploading = true
         // console.log(formData.get('myFile'))
-        this.$http.post('/api/game/va', formData, config).then(res => {
+        this.$http.post('http://meet.17link.cc/api/game/va', formData, config).then(res => {
           this.uploading = false
           if (res.data.status === 301) {
             alert('未收到邀请,或超过24小时')
@@ -116,7 +116,7 @@
         }
       },
       _push () {
-        this.$http.get('/api/game/info?type=Va').then(res => {
+        this.$http.get('http://meet.17link.cc/api/game/info?type=Va').then(res => {
           let data = res.data
           if (parseInt(data.status) === 404) {
             return

@@ -1,5 +1,6 @@
 <template>
   <div class='rule'>
+    <img src="./rule.png">
   </div>
 </template>
 <script>
@@ -15,10 +16,15 @@
     position: absolute
     top: 0
     left: 0
-    right: 0
-    bottom: 0
     z-index: 10
-    width: 100%
+    width: 100vw
     height: 100vh
-    background: #fff url('./rule.png') no-repeat center 1rem / 90% 90%
+    background: url('./bg.jpg') no-repeat 0 0 / 100% 100%
+    display: flex
+    justify-content: center
+    padding-top: 3.6rem
+    box-sizing: border-box
+    img
+      width: 90%
+      height: 80%
 </style>

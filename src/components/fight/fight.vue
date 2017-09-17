@@ -31,7 +31,7 @@
       <transition name='bounceRight'>
         <img src="./fight_start.png" v-show='invite && init' @click='start'>
       </transition>
-      <input @change='toUpload' v-show='!isUpload && isAndroid' class='ipt' type="file" name="xin">
+      <input @change='toUpload' v-show='this.types === "rt" && isAndroid' class='ipt' type="file" name="xin">
     </div>
 
     <transition name='rotate'>
@@ -102,7 +102,7 @@
       this._getListData()
 
       // 判断是否已经上传过了
-      this.$http.get(`/api/game/${this.types}_check`)
+      this.$http.get(`http://meet.17link.cc/api/game/${this.types}_check`)
       .then(res => {
         if (!res.data.data.status) {
           this.isUpload = true
@@ -159,7 +159,7 @@
         this.uploading = true
         this.isSlide = true
         // console.log(formData.get('myFile'))
-        this.$http.post('/api/game/va', formData, config).then(res => {
+        this.$http.post('http://meet.17link.cc/api/game/va', formData, config).then(res => {
           this.uploading = false
           this.isSlide = false
           if (res.data.status === 301) {
@@ -178,12 +178,12 @@
         this.$router.push('/result')
       },
       _getInvite () {
-        this.$http.get(`/api/game/${this.types}_check`).then(res => {
+        this.$http.get(`http://meet.17link.cc/api/game/${this.types}_check`).then(res => {
           res.data.data.status === false ? (this.invite = false) : (this.invite = true)
         })
       },
       _getListData () {
-        this.$http.get(`/api/game/${this.types}_list?zone_id=${this.num}&page=${this.page}`)
+        this.$http.get(`http://meet.17link.cc/api/game/${this.types}_list?zone_id=${this.num}&page=${this.page}`)
         .then(res => {
           if (this.flag) {
             let data = res.data.data.data

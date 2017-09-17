@@ -106,7 +106,7 @@
           alert('您的手机号码错误，请重新输入')
           return
         }
-        this.$http.post('/api/game/code', {
+        this.$http.post('http://meet.17link.cc/api/game/code', {
           phone: this.tel
         }).then(res => {
           if (res.data.status === 200) {
@@ -128,7 +128,7 @@
         } else if (!this.code) {
           alert('请输入验证码')
         } else {
-          this.$http.post('/api/game/register', {
+          this.$http.post('http://meet.17link.cc/api/game/register', {
             phone: this.tel,
             code: this.code
           }).then(res => {
@@ -146,14 +146,15 @@
         }
       },
       _login () {
-        let id = storage.get('id')
-        if (id) {
-          this.isLogined = true
-          this.popUp = false
-        } else {
-          this.isLogined = false
-          this.popUp = true
-        }
+        this.$http.get('http://meet.17link.cc/api/game/zone').then(res => {
+          if (res.data.status === 403) {
+            this.isLogined = false
+            this.popUp = true
+          } else {
+            this.isLogined = true
+            this.popUp = false
+          }
+        })
       },
       ...mapMutations([
         'SET_CLICK'

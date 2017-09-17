@@ -53,7 +53,8 @@
         num: 0,
         list: [],
         selectList: [],
-        init: false
+        init: false,
+        checkboxValue: ''
       }
     },
     created () {
@@ -84,7 +85,7 @@
         this.SET_CLICK(true)
         // 表单提交
         if (this.num > 0 && this.num <= 3) {
-          this.$http.post('/api/game/at', {
+          this.$http.post('http://meet.17link.cc/api/game/at', {
             member_id: this.selectList
           }).then(res => {
             if (res.data) {
@@ -104,7 +105,7 @@
         }
       },
       _getShareList () {
-        this.$http.get('/api/game/at_list').then(res => {
+        this.$http.get('http://meet.17link.cc/api/game/at_list').then(res => {
           this.list = res.data.data
         })
       },
@@ -172,6 +173,4 @@
       margin-top: 1rem
       display: flex
       justify-content: center
-      img
-        width: 70%
 </style>

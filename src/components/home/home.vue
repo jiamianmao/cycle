@@ -55,13 +55,11 @@
     methods: {
       inter () {
         this.SET_CLICK(true)
+        this.img = require('./1.jpg')
         setTimeout(() => {
-          setTimeout(() => {
-            this.$router.push('/king')
-            return
-          }, 2000)
-          this.img = require('./1.jpg')
-        }, 500)
+          this.$router.push('/king')
+          return
+        }, 5000)
       },
       ...mapMutations([
         'SET_CLICK'

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <music></music>
+    <music ref='music'></music>
     <router-view v-wechat-title="$route.meta.title" img-set="/static/1.png"></router-view>
   </div>
 </template>
@@ -9,9 +9,12 @@
 import Music from '@/components/music/music'
 export default {
   data () {
-    return {
-
-    }
+    return {}
+  },
+  mounted () {
+    document.addEventListener('WeixinJSBridgeReady', () => {
+      this.$refs.music.play()
+    }, false)
   },
   components: {
     Music

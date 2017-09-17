@@ -1,7 +1,7 @@
 <template>
   <div class='container' @click='toggle' :class='cdCls'>
     <img src="./music.png">
-    <audio src='http://outpmmta5.bkt.clouddn.com/bg.mp3' autoplay loop ref='bg'></audio>
+    <audio src='http://outpmmta5.bkt.clouddn.com/cycle.mp3' loop ref='bg'></audio>
     <audio src="http://outpmmta5.bkt.clouddn.com/btn.mp3" ref='btn'></audio>
   </div>
 </template>
@@ -14,6 +14,9 @@
         playing: true
       }
     },
+    mounted () {
+      this.$refs.bg.play()
+    },
     methods: {
       toggle () {
         this.playing = !this.playing
@@ -22,6 +25,9 @@
         } else {
           this.$refs.bg.play()
         }
+      },
+      play () {
+        this.$refs.bg.play()
       },
       ...mapMutations([
         'SET_CLICK'
@@ -59,8 +65,10 @@
     align-items: center
     &.play
       animation: rotate 5s linear infinite
+      -webkit-animation: rotate 5s linear infinite
     &.pause
       animation-play-state: paused
+      -webkit-animation-play-state: paused
     img
       width: 60%
     
@@ -68,6 +76,7 @@
     @keyframes rotate
       0%
         transform: rotate(0)
+        -webkit-transform: rotate(0)
       100%
-        transform: rotate(360deg)
+        -webkit-transform: rotate(360deg)
 </style>

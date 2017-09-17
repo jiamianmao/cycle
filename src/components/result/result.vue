@@ -84,7 +84,7 @@
     mounted () {
       this.init = true
       let list = []
-      this.$http.get('/api/game/zone').then(res => {
+      this.$http.get('http://meet.17link.cc/api/game/zone').then(res => {
         if (parseInt(res.data.status) === 200) {
           let data = res.data.data
           data.forEach(item => {
@@ -244,7 +244,7 @@
         this.idx.push(index)
       },
       _getZone () {
-        this.$http.get('/api/game/zone').then(res => {
+        this.$http.get('http://meet.17link.cc/api/game/zone').then(res => {
           let result = res.data.data
           for (let i = 0; i < result.length; i++) {
             let num = result[i].a * 100 | 0
