@@ -3,24 +3,27 @@
 
     <div class="upload">
       <form action="#" enctype='multipart/form-data' method='POST'>
-        <div class='file_wrapper'>
-          <transition name='bounceLeft'>
-            <img class='icon' src="./upload_1.png" v-show='init'>
-          </transition>
-          <transition name='bounceRight'>
-            <img @click='slideInfo' class='file' src="./upload_2.png" v-show='init'>
-          </transition>
-          <input @change='isUpload' @click='voice' v-show='isAndroid' class='ipt' type="file" name="shen">
-        </div>
 
-        <div class='file_wrapper' v-show='group === "A"'>
+        <div class='file_wrapper'>
           <transition name='bounceLeft'>
             <img class='icon' src="./upload_3.png" v-show='init'>
           </transition>
           <transition name='bounceRight'>
-            <img @click='slideInfo' class='file' src="./upload_4.png" v-show='init'>
+            <img @click='slideInfo' class='file' src="./upload_4.png" v-show='!xinUpload && init'>
           </transition>
-          <input @change='isUpload' @click='voice' v-show='isAndroid' class='ipt' type="file" name="xin">
+          <p v-show='xinUpload' class='file'>已上传</p>
+          <input @change='isUpload' @click='voice' v-show='!xinUpload && isAndroid' class='ipt' type="file" name="xin">
+        </div>
+
+        <div class='file_wrapper' v-show='group === "A"'>
+          <transition name='bounceLeft'>
+            <img class='icon' src="./upload_1.png" v-show='init'>
+          </transition>
+          <transition name='bounceRight'>
+            <img @click='slideInfo' class='file' src="./upload_2.png" v-show='!shenUpload && init'>
+          </transition>
+          <p v-show='shenUpload' class='file'>已上传</p>
+          <input @change='isUpload' @click='voice' v-show='!shenUpload && isAndroid' class='ipt' type="file" name="shen">
         </div>
 
       </form>
@@ -30,7 +33,9 @@
       <div class="ios" v-show='isiOS && isSlide'>
         <p>请您把录制好的音频文件发送至下面邮箱</p>
         <span>R8zwz2017@163.com</span>
-        <p>发送邮件时请注明个人手机号和要完成的挑战</p>
+        <p>发送邮件时请注明姓名，电话及录制内容名称</p>
+        <p class='bottom'>发送成功(工作日9:00-18:00，2小时内审核上传，其他时间次日10:00点前审核上传)</p>
+        <p>可@其他同事进行挑战</p>
       </div>
     </transition>
 
@@ -46,6 +51,7 @@
   import Loading from '@/base/loading/loading'
   import storage from 'good-storage'
   import { mapMutations } from 'vuex'
+  import { domain } from '@/common/config/config'
 
   export default {
     data () {
@@ -53,10 +59,11 @@
         isAndroid: true,
         isiOS: false,
         isSlide: false,
-        flag: 0,
         group: 'A',
         uploading: false,
-        init: false
+        init: false,
+        shenUpload: false,
+        xinUpload: false
       }
     },
     created () {
@@ -71,6 +78,7 @@
     },
     mounted () {
       this.init = true
+      this.$emit('fadeIn')
     },
     methods: {
       slideInfo () {
@@ -92,55 +100,40 @@
           header: {'Content-Type': 'application/x-www-form-urlencoded'}
         }
         this.uploading = true
-        // console.log(formData.get('myFile'))
-        this.$http.post('http://meet.17link.cc/api/game/va', formData, config).then(res => {
+        this.$http.post(`${domain}/game/va`, formData, config).then(res => {
           this.uploading = false
-          if (res.data.status === 301) {
+          if (parseInt(res.data.status) === 301) {
             alert('未收到邀请,或超过24小时')
           } else {
-            this.flag++
-            if (this.flag === 2) {
-              this.$router.push('/share')
-            }
+            this._push()
           }
         })
       },
       _getUserGorup () {
         let post = storage.get('post')
         if (post === 'A') {
-          this.flag = 0
           this.group = 'A'
         } else {
-          this.flag = 1
           this.group = 'B'
         }
       },
       _push () {
-        this.$http.get('http://meet.17link.cc/api/game/info?type=Va').then(res => {
+        this.$http.get(`${domain}/game/info?type=Va`).then(res => {
           let data = res.data
           if (parseInt(data.status) === 404) {
             return
+          } else if (data.data.status >= 1) {
+            this.shenUpload = true
+            this.xinUpload = true
+            this.$router.push('/share')
           } else {
-            if (this.group === 'A') {
-              if (data.data.game_annexe.length === 0) {
-                this.flag = 0
-                return
-              } else if (data.data.game_annexe.length === 1) {
-                this.flag = 1
-                return
+            data.data.game_annexe.forEach(item => {
+              if (item.name === 'audio_1') {
+                this.shenUpload = true
               } else {
-                this.flag = 2
-                this.$router.push('/share')
+                this.xinUpload = true
               }
-            } else {
-              if (data.data.game_annexe.length === 0) {
-                this.flag = 1
-                return
-              } else {
-                this.flag = 2
-                this.$router.push('/share')
-              }
-            }
+            })
           }
         })
       },
@@ -179,6 +172,9 @@
         .file
           width: 50%
           margin-left: 0.26666666666666666rem
+          color: #fff
+          font-size: 0.32rem
+          letter-spacing: 3px
         .ipt
           position: absolute
           right: 2%
@@ -209,8 +205,10 @@
       z-index: 1
       span
         display: block
-        margin: 0.8rem 0
+        margin: .4rem 0
         color: #E51C23
+      .bottom
+        margin: .4rem
     .confirm
       position: absolute
       top: 50%

@@ -8,7 +8,7 @@
       <img src="./t_1.png" @click='find'>
       <div class='jax'>
         <span class='urlWrapper' v-for='(item, index) of imgList'>
-          <span :style="{background: 'url(' + item.url + ')' + '100% 100%/100% 100%'}" @click='findData(index)' :class='{fadeIn: idx.indexOf(index) !== -1}'>
+          <span class='pad fadeIn' :style="{background: 'url(' + item.url + ')' + '100% 100%/100% 100%'}">
             {{item.percent}}
           </span>
         </span>
@@ -42,6 +42,7 @@
   import zone6 from '@/assets/zone6.png'
   import chinaJson from './china.json'
   import { mapMutations } from 'vuex'
+  import { domain } from '@/common/config/config'
 
   const NUMBER = 6
 
@@ -84,7 +85,7 @@
     mounted () {
       this.init = true
       let list = []
-      this.$http.get('http://meet.17link.cc/api/game/zone').then(res => {
+      this.$http.get(`${domain}/game/zone`).then(res => {
         if (parseInt(res.data.status) === 200) {
           let data = res.data.data
           data.forEach(item => {
@@ -244,7 +245,7 @@
         this.idx.push(index)
       },
       _getZone () {
-        this.$http.get('http://meet.17link.cc/api/game/zone').then(res => {
+        this.$http.get(`${domain}/game/zone`).then(res => {
           let result = res.data.data
           for (let i = 0; i < result.length; i++) {
             let num = result[i].a * 100 | 0
@@ -387,7 +388,7 @@
             font-weight: bold
     .btn
       position: absolute
-      bottom: 1.4rem
+      bottom: 1rem
       left: 0
       width: 100%
       text-align: center

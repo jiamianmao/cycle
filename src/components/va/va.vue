@@ -1,7 +1,7 @@
 <template>
   <div>
-    <vaOrRt :types='types' @selectItem='selectItem' ref='vaOrRt' ></vaOrRt>
-    <router-view :num='num' @toPause='pause'></router-view>
+    <vaOrRt :types='types' @selectItem='selectItem' ref='vaOrRt' @pause='music'></vaOrRt>
+    <router-view :num='num' @toPause='pause' @play='play'></router-view>
   </div>
 </template>
 
@@ -25,6 +25,12 @@
         this.$router.push({
           path: `/va/${n}`
         })
+      },
+      music () {
+        this.$emit('music')
+      },
+      play () {
+        this.$emit('fadeIn')
       },
       pause () {
         this.$refs.vaOrRt.pause()

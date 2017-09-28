@@ -15,7 +15,7 @@
     </transition>
 
     <transition name='bounceRight'>
-      <div class="image" v-show='img'>
+      <div class="image" v-show='img' @click='quick'>
         <img :src="img">
       </div>
     </transition>
@@ -28,7 +28,7 @@
       </transition>
 
       <transition name='bounceUp'>
-        <div class="btn" @click='inter' v-show='init'>
+        <div class="btn" @click='enter' v-show='init'>
           <img src="./go.png">
         </div>
       </transition>
@@ -38,6 +38,7 @@
 </template>
 <script>
   import { mapMutations } from 'vuex'
+  // import storage from 'good-storage'
 
   export default {
     data () {
@@ -47,19 +48,40 @@
       }
     },
     created () {
-      // console.log(this.setClick)
+      // this.$http.post('http://meet.17link.cc/api/member/info').then(res => {
+      //   if (parseInt(res.data.status) === 200) {
+      //     let post = res.data.data.post
+      //     console.log(post)
+      //     storage.set('post', post)
+      //     if (post === 'A') {
+      //       storage.set('rt', '心内+肾内RT讲解标准版')
+      //       storage.set('va', '心内+肾内VA讲解标准版')
+      //     } else {
+      //       storage.set('rt', '社区RT')
+      //       storage.set('va', '心内VA讲解标准版')
+      //     }
+      //   }
+      // })
     },
     mounted () {
       this.init = true
     },
     methods: {
-      inter () {
+      enter () {
         this.SET_CLICK(true)
         this.img = require('./1.jpg')
-        setTimeout(() => {
+        this.id = setTimeout(() => {
+          this.img = null
           this.$router.push('/king')
           return
-        }, 5000)
+        }, 3000)
+      },
+      quick () {
+        if (this.id) {
+          clearTimeout(this.id)
+        }
+        this.img = null
+        this.$router.push('/king')
       },
       ...mapMutations([
         'SET_CLICK'
@@ -89,7 +111,7 @@
       width: 2.24rem
       background: url('./right.png') no-repeat 0 0/100% 100%
     .logo
-      margin: 2.1066666666666665rem auto 0
+      margin: 1.85rem auto 0
       height: 6.8rem
       width: 6.6rem
       background: url('./logo.png') no-repeat 0 0/100% 100%
@@ -122,5 +144,4 @@
         height: 50%
         img
           width: 70%
-          height: 100%
 </style>

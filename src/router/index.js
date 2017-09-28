@@ -14,9 +14,12 @@ import Result from '@/components/result/result'
 import Share from '@/components/share/share'
 import Huan from '@/components/huan/huan'
 import Give from '@/components/give/give'
+import Treasure from '@/components/treasure/treasure'
+import Video from '@/components/video/video'
 
 Vue.use(Router)
 Vue.use(require('vue-wechat-title'))
+import storage from 'good-storage'
 
 export default new Router({
   routes: [
@@ -59,27 +62,29 @@ export default new Router({
       path: '/va',
       component: Va,
       meta: {
-        title: 'VA挑战'
-      },
-      children: [
-        {
-          path: ':id',
-          component: VaFight
-        }
-      ]
+        title: storage.get('va')
+      }
+    },
+    {
+      path: '/va/:id',
+      component: VaFight,
+      meta: {
+        title: '规则介绍'
+      }
     },
     {
       path: '/rt',
       component: Rt,
       meta: {
-        title: 'RT挑战'
-      },
-      children: [
-        {
-          path: ':id',
-          component: RtFight
-        }
-      ]
+        title: storage.get('rt')
+      }
+    },
+    {
+      path: ':id',
+      component: RtFight,
+      meta: {
+        title: '规则介绍'
+      }
     },
     {
       path: '/file',
@@ -109,6 +114,22 @@ export default new Router({
       meta: {
         title: '奖励发放'
       }
+    },
+    {
+      path: '/treasure',
+      component: Treasure,
+      meta: {
+        title: '藏书阁'
+      },
+      children: [
+        {
+          path: 'video',
+          component: Video,
+          meta: {
+            title: '视频资源'
+          }
+        }
+      ]
     }
   ]
 })

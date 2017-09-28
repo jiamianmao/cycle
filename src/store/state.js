@@ -1,5 +1,7 @@
 const state = {
-  click: false
+  click: false,
+  initRule: 0,
+  initAlert: 0
 }
 
 export default state

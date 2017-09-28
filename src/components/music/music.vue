@@ -29,13 +29,16 @@
       play () {
         this.$refs.bg.play()
       },
+      pause () {
+        this.$refs.bg.pause()
+      },
       ...mapMutations([
         'SET_CLICK'
       ])
     },
     computed: {
       cdCls () {
-        return this.playing ? 'play' : 'play pause'
+        return this.playing ? 'play' : ''
       },
       ...mapGetters([
         'click'
@@ -59,7 +62,6 @@
     width: 1rem
     border-radius: 50%
     z-index: 999
-    border: 1px solid #000
     display: flex
     justify-content: center
     align-items: center
@@ -70,7 +72,9 @@
       animation-play-state: paused
       -webkit-animation-play-state: paused
     img
-      width: 60%
+      width: 100%
+      border-radius: 50%
+      border: 2px solid rgba(0, 0, 0, .1)
     
 
     @keyframes rotate

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <vaOrRt :types='types' @selectItem='selectItem' ref='vaOrRt' ></vaOrRt>
-    <router-view :num='num' @toPause='pause'></router-view>
+    <vaOrRt :types='types' @selectItem='selectItem' ref='vaOrRt' @pause='music'></vaOrRt>
+    <router-view :num='num' @toPause='pause' @play='play'></router-view>
   </div>
 </template>
 
@@ -16,10 +16,13 @@
         num: 1
       }
     },
-    created () {
-      console.log(1)
-    },
     methods: {
+      music () {
+        this.$emit('music')
+      },
+      play () {
+        this.$emit('fadeIn')
+      },
       selectItem (n) {
         this.SET_CLICK(true)
         this.num = n

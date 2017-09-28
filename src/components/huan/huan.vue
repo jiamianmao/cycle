@@ -95,7 +95,7 @@
       width: 100%
       display: flex
       align-items: center
-      font-size: 28px
+      font-size: 0.37333333333333335rem
       img
         max-height: 60%
         margin-right: .3rem
@@ -135,7 +135,7 @@
               width: 1.6rem
               height: 80%
               border: 0
-              font-size: 24px
+              font-size: 0.32rem
               background: #179B16
               color: #fff
               border-radius: 6px

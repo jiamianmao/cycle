@@ -28,28 +28,42 @@
         </form>
       </div>
     </div>
+
     <div class="wrapper">
-      <div class="top">
-        <transition name='bounceDown'>
-          <div v-show='init'>
-            <img src="./war.png">
+    
+      <transition name='bounceDown'>
+        <div class="top" v-show='init'>
+          <div>
+            <img src="./war.png" class='icon'>
           </div>
-        </transition>
-        <transition name='bounceLeft'>
-          <div @click='chang' v-show='init'>
+          <div @click='chang'>
             <img class='btn' src="./chang.png">
           </div>
-        </transition>
-      </div>
+        </div>
+      </transition>
+      
+
       <div class="bottom">
-        <transition name='bounceRight'>
-          <div v-show='init'>
-            <img src="./money.png">
+        
+        <transition name='bounceLeft'>
+          <div class='left' v-show='init'>
+            <div>
+              <img src="./money.png" class='icon'>
+            </div>
+            <div @click='huan'>
+              <img class='btn' src="./huan.png">
+            </div>
           </div>
         </transition>
-        <transition name='bounceUp'>
-          <div @click='huan' v-show='init'>
-            <img class='btn' src="./huan.png">
+
+        <transition name='bounceRight'>
+          <div class='right' v-show='init'>
+            <div>
+              <img src="./box_icon.png" class='icon'>
+            </div>
+            <div @click='treasure'>
+              <img class='btn' src="./box.png">
+            </div>
           </div>
         </transition>
       </div>
@@ -60,7 +74,8 @@
 <script>
   import Count from '@/base/countDown/countDown'
   import 'common/js/alert'
-  import storage from 'good-storage'
+  import { domain } from '@/common/config/config'
+  // import storage from 'good-storage'
   import { mapMutations } from 'vuex'
 
   export default {
@@ -106,10 +121,10 @@
           alert('您的手机号码错误，请重新输入')
           return
         }
-        this.$http.post('http://meet.17link.cc/api/game/code', {
+        this.$http.post(`${domain}/game/code`, {
           phone: this.tel
         }).then(res => {
-          if (res.data.status === 200) {
+          if (parseInt(res.data.status) === 200) {
             this.start = true
           } else {
             this.tel = ''
@@ -128,26 +143,37 @@
         } else if (!this.code) {
           alert('请输入验证码')
         } else {
-          this.$http.post('http://meet.17link.cc/api/game/register', {
+          this.$http.post(`${domain}/game/register`, {
             phone: this.tel,
             code: this.code
           }).then(res => {
-            if (res.data.status === 200) {
+            if (parseInt(res.data.status) === 200) {
               this.isLogined = true
               this.popUp = false
-              storage.set('id', this.tel)
-              storage.set('post', res.data.data.post)
-              storage.set('zone_id', res.data.data.zone_id)
-              storage.set('score', res.dta.data.score)
+              // let post = res.data.data.post
+              // storage.set('id', this.tel)
+              // storage.set('post', post)
+              // storage.set('zone_id', res.data.data.zone_id)
+              // storage.set('score', res.dta.data.score)
+              // if (post === 'A') {
+              //   storage.set('va', '心内+肾内VA讲解标准版')
+              //   storage.set('rt', '心内+肾内RT讲解标准版')
+              // } else {
+              //   storage.set('va', '心内VA讲解标准版')
+              //   storage.set('rt', '社区RT')
+              // }
             } else {
               alert('您的信息输入不正确')
             }
           })
         }
       },
+      treasure () {
+        this.$router.push('/treasure')
+      },
       _login () {
-        this.$http.get('http://meet.17link.cc/api/game/zone').then(res => {
-          if (res.data.status === 403) {
+        this.$http.get(`${domain}/game/zone`).then(res => {
+          if (parseInt(res.data.status) === 403) {
             this.isLogined = false
             this.popUp = true
           } else {
@@ -243,34 +269,37 @@
         .code
           width: 20%
     .wrapper
-      width: 5.2rem
-      img
+      width: 100%
+      .icon
         width: 3.2rem
+        height: 3.2rem
       .btn
         width: 3.8rem
+        height: 1.1rem
       .top
         width: 100%
         height: 50%
         div
           text-align: center
       .bottom
-        position: relative
-        margin-top: 1.26rem
-        width: 100%
-        height: 50%
-        opacity: .3
-        &:before
-          content: ''
-          display: block
-          position: absolute
-          top: 0
-          left: 0
-          width: 100%
-          height: 100%
-          background: rgba(0, 0, 0, .01)
-          z-index: 1
-        div
+        margin-top: .8rem
+        display: flex
+        flex-direction: row
+        justify-content: space-between
+        .left, .right
+          width: 50%
           text-align: center
-          img
-            max-width: 100%
+        .left
+          position: relative
+          opacity: .3
+          &:before
+            content: ''
+            display: block
+            position: absolute
+            top: 0
+            left: 0
+            width: 100%
+            height: 100%
+            background: rgba(0, 0, 0, .01)
+            z-index: 1
 </style>

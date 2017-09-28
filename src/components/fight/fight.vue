@@ -38,7 +38,10 @@
       <div class="ios" v-show='isiOS && isSlide'>
         <p>请您把录制好的音频文件发送至下面邮箱</p>
         <span>R8zwz2017@163.com</span>
-        <p>发送邮件时请注明个人手机号和要完成的挑战</p>
+        <p>发送邮件时请注明姓名，电话及录制内容名称</p>
+        <p class='bottom'>发送成功(工作日9:00-18:00，2小时内审核上传，其他时间次日10:00点前审核上传)</p>
+        <p>可完成后续挑战</p>
+
       </div>
     </transition>
 
@@ -60,8 +63,10 @@
   import rt from '@/assets/rt_fight.png'
   import Loading from '@/base/loading/loading'
   import { mapMutations } from 'vuex'
+  import { domain } from '@/common/config/config'
   import $ from 'jquery'
   import _ from 'lodash'
+  import storage from 'good-storage'
 
   export default {
     props: {
@@ -102,7 +107,7 @@
       this._getListData()
 
       // 判断是否已经上传过了
-      this.$http.get(`http://meet.17link.cc/api/game/${this.types}_check`)
+      this.$http.get(`${domain}/game/${this.types}_check?zone_id=${this.num}`)
       .then(res => {
         if (!res.data.data.status) {
           this.isUpload = true
@@ -129,7 +134,21 @@
     methods: {
       see () {
         this.SET_CLICK(true)
-        this.$router.push('/file')
+        let post = storage.get('post')
+        if (this.types === 'va') {
+          alert('若您暂未收到他人@，只可学习资料，无法开始VA试炼')
+          if (post === 'A') {
+            window.location.href = 'http://meet.17link.cc/storage/pages/September2017/J7GOvYYFY0MAEp7Y4mRm.pdf'
+          } else {
+            window.location.href = 'http://meet.17link.cc/storage/pages/September2017/xR9wI7oh16iXF5rasGmo.pdf'
+          }
+        } else {
+          if (post === 'A') {
+            window.location.href = 'http://meet.17link.cc/storage/pages/September2017/tlOE6CzeDWJJakl3Eaf3.pdf'
+          } else {
+            window.location.href = 'http://meet.17link.cc/storage/pages/September2017/yMFypmSCymLQ6j2XfVdL.pdf'
+          }
+        }
       },
       start () {
         this.SET_CLICK(true)
@@ -159,10 +178,10 @@
         this.uploading = true
         this.isSlide = true
         // console.log(formData.get('myFile'))
-        this.$http.post('http://meet.17link.cc/api/game/va', formData, config).then(res => {
+        this.$http.post(`${domain}/game/${this.types}`, formData, config).then(res => {
           this.uploading = false
           this.isSlide = false
-          if (res.data.status === 301) {
+          if (parseInt(res.data.status) === 301) {
             alert('未收到邀请,或超过24小时')
           } else {
             this.$router.push('/result')
@@ -178,12 +197,12 @@
         this.$router.push('/result')
       },
       _getInvite () {
-        this.$http.get(`http://meet.17link.cc/api/game/${this.types}_check`).then(res => {
+        this.$http.get(`${domain}/game/${this.types}_check?zone_id=${this.num}`).then(res => {
           res.data.data.status === false ? (this.invite = false) : (this.invite = true)
         })
       },
       _getListData () {
-        this.$http.get(`http://meet.17link.cc/api/game/${this.types}_list?zone_id=${this.num}&page=${this.page}`)
+        this.$http.get(`${domain}/game/${this.types}_list?zone_id=${this.num}&page=${this.page}`)
         .then(res => {
           if (this.flag) {
             let data = res.data.data.data
@@ -258,7 +277,7 @@
             border-radius: 50%
     .btn
       position: absolute
-      bottom: .8rem
+      bottom: .2rem
       width: 100%
       text-align: center
       .ipt
@@ -284,8 +303,10 @@
       z-index: 1
       span
         display: block
-        margin: 0.8rem 0
+        margin: .4rem 0
         color: #E51C23
+      .bottom
+        margin: .4rem
     .mask
       position: fixed
       top: 0

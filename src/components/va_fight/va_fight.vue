@@ -20,6 +20,9 @@
     created () {
       this.$emit('toPause')
     },
+    mounted () {
+      this.$emit('play')
+    },
     components: {
       Fight
     }

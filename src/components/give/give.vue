@@ -61,7 +61,6 @@
         width: 15%
     .middle
       height: 1rem
-      // background: red
       padding: .2rem 0
       input
         border: 1px solid #333
@@ -70,7 +69,7 @@
         padding: 0 .2rem
         width: 4rem
         text-align: center
-        font-size: 32px
+        font-size: 0.4266666666666667rem
     .bottom
       margin-top: 4rem
       height: 1rem
@@ -78,7 +77,7 @@
         height: 100%
         border: 0
         padding: 0 1rem
-        font-size: 32px
+        font-size: 0.4266666666666667rem
         border-radius: 8px
         background: #179B16
         color: #fff
